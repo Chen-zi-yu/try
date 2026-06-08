@@ -1,0 +1,52 @@
+<div id="guide-box" onclick="showUploadForm()">
+  <img src="guide-image.jpg" alt="引導圖片" width="200">
+  <p>點擊這裡，開始分享你的照片與故事！</p>
+</div>
+
+<div id="upload-form" style="display: none; margin-top: 20px;">
+  <input type="file" id="photo-input" accept="image/*"><br><br>
+  <textarea id="text-input" placeholder="請輸入文字說明..."></textarea><br><br>
+  <button onclick="submitData()">發布</button>
+</div>
+
+<div id="wall" style="margin-top: 30px;">
+  <h3>大家分享的內容：</h3>
+  </div>
+
+<script>
+  // 1. 點擊引導區塊後，顯示表單
+  function showUploadForm() {
+    document.getElementById('upload-form').style.display = 'block';
+  }
+
+  // 2. 處理送出動作（這裡暫時用前端即時顯示示範）
+  function submitData() {
+    const photoInput = document.getElementById('photo-input');
+    const textInput = document.getElementById('text-input').value;
+    const wall = document.getElementById('wall');
+
+    if (photoInput.files && photoInput.files[0]) {
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        // 建立一個新的內容區塊
+        const post = document.createElement('div');
+        post.style.border = "1px solid #ccc";
+        post.style.margin = "10px 0";
+        post.style.padding = "10px";
+        
+        post.innerHTML = `
+          <img src="${e.target.result}" width="150"><br>
+          <p>${textInput}</p>
+        `;
+        
+        // 塞進佈告欄
+        wall.appendChild(post);
+      };
+      
+      reader.readAsDataURL(photoInput.files[0]);
+    }
+    
+    // (實際開發時，這裡還要寫把資料傳送到 Firebase 或後端的 code，才能永久保存喔！)
+  }
+</script>
